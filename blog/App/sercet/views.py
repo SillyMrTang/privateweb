@@ -4,7 +4,6 @@ from flask import render_template, url_for, redirect, request, jsonify, session,
 from . import sercet
 
 
-
 @sercet.route('/sercet', methods=['GET'])
 def blog():
     return render_template('sercet.html')

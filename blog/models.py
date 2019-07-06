@@ -23,6 +23,7 @@ class User(db.Model):
     create_time = db.Column(db.DateTime, nullable=True, default=datetime.now)
 
     c = db.relationship('Comment', backref='user', lazy='dynamic')
+
     # r = db.relationship('Article', backref='user', lazy='dynamic')
     # s = db.relationship('Status', backref='user', lazy='dynamic')
 
@@ -72,6 +73,7 @@ class Status(db.Model):
     status_posttime = db.Column(db.DateTime)
     # Article = db.relationship('Article', backref='Article', lazy='dynamic')
 
+
 class AdminUser(db.Model):
     __tablename__ = "admin_user"
 
@@ -101,45 +103,48 @@ class Article(db.Model):
     articls_posttime = db.Column(db.DateTime)
     articls_category = db.Column(db.String(99), unique=False, default=None)
     articls_headimg = db.Column(db.String(99), unique=False, default=None)
+    articls_views = db.Column(db.INTEGER, default=0, comment='阅读数')
+    articls_gives = db.Column(db.INTEGER, default=0, comment='点赞数')
     # user_id = db.Column(db.INTEGER, db.ForeignKey('admin_user.user_id'))  # 关联用户userID
     tag_id = db.Column(db.INTEGER, db.ForeignKey('tag.id'))  # 关联标签ID
-    category_id =  db.Column(db.INTEGER, db.ForeignKey('category.id'))  # 关联分类ID
+    category_id = db.Column(db.INTEGER, db.ForeignKey('category.id'))  # 关联分类ID
     comment = db.relationship('Comment', backref='comment', lazy='dynamic')
     tag = db.relationship('Tag', backref='tag')
     category = db.relationship('Category', backref='status')
 
+
 class Tag(db.Model):
     __tablename__ = "tag"
-    id = db.Column(db.Integer, primary_key=True,autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(32), nullable=False)
     desc = db.Column(db.String(64), nullable=True)
     create_time = db.Column(db.DateTime, nullable=True, default=datetime.now)
-    Article = db.relationship('Article',  lazy='dynamic')
+    Article = db.relationship('Article', lazy='dynamic')
 
     def __repr__(self):
         return '<User %r>' % self.name
+
 
 class Category(db.Model):
     __tablename__ = "category"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    category_title= db.Column(db.String(300), unique=False)
+    category_title = db.Column(db.String(300), unique=False)
     create_time = db.Column(db.DateTime, nullable=True, default=datetime.now)
-    Article = db.relationship('Article',  lazy='dynamic')
+    Article = db.relationship('Article', lazy='dynamic')
     info = db.Column(db.String(255), unique=False)
     # Article = db.relationship('Article', backref='Article', lazy='dynamic')
+
 
 class Secret(db.Model):
     __tablename__ = "Secret"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    secret_title= db.Column(db.String(300), unique=False)
+    secret_title = db.Column(db.String(300), unique=False)
     secret_desc = db.Column(db.String(64), nullable=True)
-    secret_content= db.Column(db.String(300), unique=False)
+    secret_content = db.Column(db.String(300), unique=False)
     secret_img = db.Column(db.String(99), unique=False, default=None)
     create_time = db.Column(db.DateTime, nullable=True, default=datetime.now)
-
-
 
 
 db.create_all(app=create_app())
